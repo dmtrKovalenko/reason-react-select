@@ -1,12 +1,34 @@
 open Emotion;
-
-let button = css([display(`flex)]);
-
-Js.log(button);
+open Popper;
 
 [@react.component]
 let make = () => {
-  <div className=button> {React.string("wenfiwnefiojn")} </div>;
+  let (isOpen, setIsOpen) = React.useState(() => false);
+
+  <Dropdown
+    isOpen
+    onClose={_ => setIsOpen(_ => false)}
+    target={
+      <button onClick={_ => setIsOpen(_ => true)}>
+        {React.string("Select country")}
+      </button>
+    }>
+    <div
+      className={css([
+        backgroundColor(Emotion.Css.Color.white),
+        borderRadius(`px(4)),
+        marginTop(`px(8)),
+        position(`absolute),
+        zIndex(2),
+        width(`px(340)),
+      ])}>
+      <ReactSelect.Async
+        autoFocus=true
+        cacheOptions=true
+        defaultOptions=true
+      />
+    </div>
+  </Dropdown>;
 };
 
 let default = make;
