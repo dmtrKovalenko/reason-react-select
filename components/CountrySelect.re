@@ -98,30 +98,14 @@ let make = (~value, ~onChange, ~className) => {
           |> onChange
           |> (_ => setIsOpen(_ => false))
         }
-        styles=ReactSelectOverrides.styles
-        components={
-          "IndicatorsContainer": () => React.null,
-          "ValueContainer": props =>
-            <div
-              className={css([
-                display(`flex),
-                alignItems(`center),
-                flexBasis(100.->`pct),
-                marginLeft(8->`px),
-              ])}>
-              <SearchIcon />
-              {React.createElement(
-                 ReactSelect.components |> ReactSelect.valueContainerGet,
-                 props,
-               )}
-            </div>,
-        }
         autoFocus=true
         cacheOptions=true
         defaultOptions=true
         loadOptions={(inputValue, cb) =>
           (inputValue, cb) |> loadCountries |> ignore
         }
+        styles=ReactSelectOverrides.styles
+        components=ReactSelectOverrides.components
       />
     </div>
   </Popper>;

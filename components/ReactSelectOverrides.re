@@ -1,3 +1,4 @@
+open Emotion;
 open ReactDOMRe.Style;
 
 let styles = {
@@ -19,7 +20,20 @@ let styles = {
     ),
 };
 
-module InicatorsContainer = {
-  [@react.component]
-  let make = () => React.null;
+let components = {
+  "IndicatorsContainer": () => React.null,
+  "ValueContainer": props =>
+    <div
+      className={css([
+        display(`flex),
+        alignItems(`center),
+        flexBasis(100.->`pct),
+        marginLeft(8->`px),
+      ])}>
+      <SearchIcon />
+      {React.createElement(
+         ReactSelect.components |> ReactSelect.valueContainerGet,
+         props,
+       )}
+    </div>,
 };
