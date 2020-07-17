@@ -73,7 +73,7 @@ module Async = {
       ~isLoading: bool=?, /* whether the Select is loading externally or not (such as options being loaded) */
       ~joinValues: bool=?, /* join multiple values into a single hidden input using the delimiter */
       ~labelKey: string=?, /* the option property to use for the label */
-      ~loadOptions: string => Js.Promise.t('a)=?,
+      ~loadOptions: (string, 'a => unit) => unit=?,
       ~matchPos: [@bs.string] [ | `any | `start]=?, /* (any, start) match the start or entire string when filtering */
       ~matchProp: [@bs.string] [ | `any | `label | `value]=?, /* (any, label, value) which option property to filter on */
       ~menuBuffer: int=?, /* buffer of px between the base of the dropdown and the viewport to shift if menu doesnt fit in viewport */
@@ -99,7 +99,7 @@ module Async = {
       ~openOnFocus: bool=?, /* open the options menu when the control gets focus */
       ~optionClassName: string=?, /* additional class(es) to apply to the elements */
       ~optionComponent: ReasonReact.reactClass=?, /* option component to render in dropdown */
-      ~optionRenderer: 'a => ReasonReact.reactElement=?, /* custom function to render the options in the menu */
+      ~optionRenderer: 'a => ReasonReact.reactElement=?, /* custom function to render the Foptions in the menu */
       ~options: array('a)=?, /* array of options */
       ~pageSize: int=?, /* number of options to jump when using page up/down keys */
       ~placeholder: StrOrNode.t=?, /* field placeholder, displayed when there's no value */

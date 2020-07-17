@@ -26,6 +26,10 @@ module Error = {
 };
 
 module NextServer = {
+  type request('a) = {
+    query: 'a
+  }
+  
   type response('a) = {json: 'a => unit};
 };
 

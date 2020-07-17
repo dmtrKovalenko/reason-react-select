@@ -18,7 +18,12 @@
       "subdirs": true
     }
   ],
-  "bs-dependencies": ["reason-react", "@ahrefs/bs-emotion", "bs-fetch", "@glennsl/bs-json"],
+  "bs-dependencies": [
+    "reason-react",
+    "@ahrefs/bs-emotion",
+    "bs-fetch",
+    "@glennsl/bs-json"
+  ],
   "reason": { "react-jsx": 3 },
   "package-specs": {
     "module": "es6",

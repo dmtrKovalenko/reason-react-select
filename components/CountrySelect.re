@@ -1,24 +1,30 @@
 open Emotion;
 open Popper;
 
-let loadCountries = inputValue => {
-  open! PromiseMonad;
-
-  Fetch.fetch("/api/countries")
-  >>- Fetch.Response.json
-  >>= Models.Decode.countries
-  >>= (response => response.countries)
-  >>/= (
-    e => {
-      Js.log2("Cannot parse response:", e);
-      [||];
-    }
-  );
-};
+// let throttledSearchCountries = Throttle.make(loadCountries, ~delay=250);
 
 [@react.component]
 let make = () => {
   let (isOpen, setIsOpen) = React.useState(() => false);
+
+  let loadCountriesRef =
+    Throttle.make(
+      ~delay=250,
+      ((inputValue, cb)) => {
+        open! PromiseMonad;
+
+        Fetch.fetch("/api/countries?q=" ++ inputValue)
+        >>- Fetch.Response.json
+        >>= Models.Decode.countries
+        >>= (response => cb(response.countries))
+        >>/= (
+          e => {
+            Js.log2("Cannot parse response:", e);
+          }
+        );
+      },
+    )
+    |> React.useRef;
 
   <Dropdown
     isOpen
@@ -41,7 +47,9 @@ let make = () => {
         autoFocus=true
         cacheOptions=true
         defaultOptions=true
-        loadOptions=loadCountries
+        loadOptions={(inputValue, cb) =>
+          (inputValue, cb) |> React.Ref.current(loadCountriesRef) |> ignore
+        }
       />
     </div>
   </Dropdown>;
