@@ -37,6 +37,21 @@ module StrOrInt = {
   let encodeOpt = Belt.Option.map(_, encode);
 };
 
+type optionProps('a) = {data: 'a};
+
+[@bs.deriving abstract]
+type components('a) = {
+  [@bs.as "Input"]
+  input: React.component({.}),
+  [@bs.as "ValueContainer"]
+  valueContainer: React.component({.}),
+  [@bs.as "Option"]
+  option: React.component(optionProps('a)),
+};
+
+[@bs.module "react-select"]
+external components: components('a) = "components";
+
 /** Mostly copied from https://github.com/ahrefs/bs-react-select/blob/master/src/BsReactSelect__Select.re */
 module Async = {
   [@bs.module "react-select/async"] [@react.component]
@@ -73,7 +88,7 @@ module Async = {
       ~isLoading: bool=?, /* whether the Select is loading externally or not (such as options being loaded) */
       ~joinValues: bool=?, /* join multiple values into a single hidden input using the delimiter */
       ~labelKey: string=?, /* the option property to use for the label */
-      ~loadOptions: (string, 'a => unit) => unit=?,
+      ~loadOptions: (string, Js.Array.t('a) => unit) => unit=?,
       ~matchPos: [@bs.string] [ | `any | `start]=?, /* (any, start) match the start or entire string when filtering */
       ~matchProp: [@bs.string] [ | `any | `label | `value]=?, /* (any, label, value) which option property to filter on */
       ~menuIsOpen: bool=?,
@@ -117,12 +132,19 @@ module Async = {
                  .
                  "menu": ReactDOMRe.Style.t => ReactDOMRe.Style.t,
                  "control": ReactDOMRe.Style.t => ReactDOMRe.Style.t,
+                 "option": ReactDOMRe.Style.t => ReactDOMRe.Style.t,
                }
                  =?,
+      ~components: {
+                     .
+                     "IndicatorsContainer": React.component('b),
+                     "ValueContainer": React.component('c),
+                   }
+                     =?,
       ~tabIndex: StrOrInt.t=?, /* tabIndex of the control */
       ~tabSelectsValue: bool=?, /* whether to select the currently focused value when the [tab] key is pressed */
       ~trimFilter: bool=?, /* whether to trim whitespace from the filter value */
-      ~value: option('a)=?, /* initial field value */
+      ~value: option('a), /* initial field value */
       ~valueComponent: ReasonReact.reactClass=?, /* function which returns a custom way to render/manage the value selected <CustomValue /> */
       ~valueKey: string=?, /* the option property to use for the value */
       ~valueRenderer: 'a => ReasonReact.reactElement=?, /* function which returns a custom way to render the value selected function (option) {} */

@@ -1,25 +1,17 @@
 open Emotion;
 
-let styles = {
-  "control": style =>
-    ReactDOMRe.Style.combine(
-      style,
-      ReactDOMRe.Style.make(
-        ~borderBottomLeftRadius="0",
-        ~borderBottomRightRadius="0",
-        (),
-      ),
-    ),
-  "menu": style =>
-    ReactDOMRe.Style.combine(
-      style,
-      ReactDOMRe.Style.make(
-        ~marginTop="0",
-        ~borderTopLeftRadius="0",
-        ~borderTopRightRadius="0",
-        (),
-      ),
-    ),
+// ISO 3166-1 alpha-2
+// ⚠️ No support for IE 11
+let countryToFlag = isoCode => {
+  isoCode
+  |> Js.String.toUpperCase
+  |> Js.String.unsafeReplaceBy0([%re "/./g"], (char, _, _) =>
+       char
+       |> Js.String.charCodeAt(0)
+       |> int_of_float
+       |> (charIso => charIso + 127397)
+       |> Js.String.fromCodePoint
+     );
 };
 
 let loadCountries =
@@ -27,11 +19,22 @@ let loadCountries =
     ~delay=250,
     ((inputValue, cb)) => {
       open! PromiseMonad;
+      open! Models;
 
       Fetch.fetch("/api/countries?q=" ++ inputValue)
       >>- Fetch.Response.json
       >>= Models.Decode.countries
-      >>= (response => cb(response.countries))
+      >>= (
+        response =>
+          response.countries
+          |> Js.Array.map(country =>
+               {
+                 ...country,
+                 label: countryToFlag(country.value) ++ "   " ++ country.label,
+               }
+             )
+          |> cb
+      )
       >>/= (
         e => {
           Js.log2("Cannot parse response:", e);
@@ -42,7 +45,8 @@ let loadCountries =
 
 [@react.component]
 let make = () => {
-  let (isOpen, setIsOpen) = React.useState(() => true);
+  let (value, setValue) = React.useState(() => None);
+  let (isOpen, setIsOpen) = React.useState(() => false);
 
   <Popper
     isOpen
@@ -60,7 +64,12 @@ let make = () => {
           borderStyle(`solid),
           borderColor(`rgba((0, 0, 0, 0.2))),
         ])}>
-        {React.string("Select country")}
+        {React.string(
+           switch (value) {
+           | Some(country) => country.label
+           | None => "Select country"
+           },
+         )}
         <ArrowIcon className={css([marginLeft(4->`px)])} />
       </button>
     }>
@@ -74,11 +83,29 @@ let make = () => {
         width(`px(340)),
       ])}>
       <ReactSelect.Async
-        styles
-        menuIsOpen=true
+        value
+        styles=ReactSelectOverrides.styles
+        components={
+          "IndicatorsContainer": () => React.null,
+          "ValueContainer": props =>
+            <div
+              className={css([
+                display(`flex),
+                alignItems(`center),
+                flexBasis(100.->`pct),
+                marginLeft(8->`px),
+              ])}>
+              <SearchIcon />
+              {React.createElement(
+                 ReactSelect.components |> ReactSelect.valueContainerGet,
+                 props,
+               )}
+            </div>,
+        }
         autoFocus=true
         cacheOptions=true
         defaultOptions=true
+        onChange={newValue => setValue(_ => Js.Nullable.toOption(newValue))}
         loadOptions={(inputValue, cb) =>
           (inputValue, cb) |> loadCountries |> ignore
         }

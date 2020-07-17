@@ -1,6 +1,6 @@
 [@react.component]
 let make = () => {
-  <svg width="13" height="13" viewBox="0 0 13 13">
+  <svg width="15" height="15" viewBox="0 0 13 13">
     <title> {ReasonReact.string("icon")} </title>
     <defs>
       <filter
