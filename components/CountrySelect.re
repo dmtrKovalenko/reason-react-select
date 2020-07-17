@@ -1,7 +1,7 @@
 open Emotion;
 
 // ISO 3166-1 alpha-2
-// ⚠️ No support for IE 11
+// ⚠️ Doesn't supported in IE 11
 let countryToFlag = isoCode => {
   isoCode
   |> Js.String.toUpperCase
@@ -30,7 +30,8 @@ let loadCountries =
           |> Js.Array.map(country =>
                {
                  ...country,
-                 label: countryToFlag(country.value) ++ "   " ++ country.label,
+                 label:
+                   countryToFlag(country.value) ++ "   " ++ country.label,
                }
              )
           |> cb
@@ -44,8 +45,7 @@ let loadCountries =
   );
 
 [@react.component]
-let make = () => {
-  let (value, setValue) = React.useState(() => None);
+let make = (~value, ~onChange, ~className) => {
   let (isOpen, setIsOpen) = React.useState(() => false);
 
   <Popper
@@ -53,6 +53,12 @@ let make = () => {
     onClose={_ => setIsOpen(_ => false)}
     target={
       <button
+        ariaLabel={
+          switch (value) {
+          | Some(country) => "Selected country is " ++ country.label
+          | None => "Select country"
+          }
+        }
         onClick={_ => setIsOpen(_ => true)}
         className={css([
           padding2(8->`px, 12->`px),
@@ -84,6 +90,14 @@ let make = () => {
       ])}>
       <ReactSelect.Async
         value
+        className
+        menuIsOpen=true
+        onChange={newValue =>
+          newValue
+          |> Js.Nullable.toOption
+          |> onChange
+          |> (_ => setIsOpen(_ => false))
+        }
         styles=ReactSelectOverrides.styles
         components={
           "IndicatorsContainer": () => React.null,
@@ -105,7 +119,6 @@ let make = () => {
         autoFocus=true
         cacheOptions=true
         defaultOptions=true
-        onChange={newValue => setValue(_ => Js.Nullable.toOption(newValue))}
         loadOptions={(inputValue, cb) =>
           (inputValue, cb) |> loadCountries |> ignore
         }

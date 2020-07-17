@@ -73,6 +73,7 @@ module Async = {
       ~clearRenderer: unit => ReasonReact.reactElement=?, /* Renders a custom clear to be shown in the right-hand side of the select when clearable true: clearRenderer() */
       ~clearValueText: string=?, /* title for the "clear" control */
       ~closeOnSelect: bool=?, /* whether to close the menu when a value is selected */
+      ~className: string=?,
       ~defaultOptions: bool=?,
       ~deleteRemoves: bool=?, /* whether pressing delete key removes the last item when there is no input value */
       ~delimiter: string=?, /* delimiter to use to join multiple values */

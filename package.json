@@ -6,7 +6,8 @@
     "dev:reason": "bsb -clean-world -make-world -w",
     "dev:next": "next dev",
     "build": "bsb -clean-world -make-world && next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "cypress open"
   },
   "license": "ISC",
   "dependencies": {
@@ -21,11 +22,14 @@
     "react-dom": "^16.12.0",
     "react-select": "^3.1.0",
     "reason-react": "^0.7.0",
-    "throttle-debounce": "^2.2.1"
+    "throttle-debounce": "^2.2.1",
+    "typescript": "^3.9.7"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
+    "@testing-library/cypress": "^6.0.0",
     "bs-platform": "^7.1.0",
-    "concurrently": "^5.1.0"
+    "concurrently": "^5.1.0",
+    "cypress": "^4.10.0"
   }
 }
