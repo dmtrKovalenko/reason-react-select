@@ -11,6 +11,9 @@
   "license": "ISC",
   "dependencies": {
     "@ahrefs/bs-emotion": "^1.0.1",
+    "@glennsl/bs-json": "^5.0.2",
+    "bs-fetch": "^0.6.2",
+    "bs-json": "^1.0.1",
     "next": "latest",
     "next-transpile-modules": "^3.0.2",
     "now": "^19.1.2",

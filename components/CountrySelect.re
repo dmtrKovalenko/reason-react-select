@@ -1,6 +1,21 @@
 open Emotion;
 open Popper;
 
+let loadCountries = inputValue => {
+  open! PromiseMonad;
+
+  Fetch.fetch("/api/countries")
+  >>- Fetch.Response.json
+  >>= Models.Decode.countries
+  >>= (response => response.countries)
+  >>/= (
+    e => {
+      Js.log2("Cannot parse response:", e);
+      [||];
+    }
+  );
+};
+
 [@react.component]
 let make = () => {
   let (isOpen, setIsOpen) = React.useState(() => false);
@@ -26,6 +41,7 @@ let make = () => {
         autoFocus=true
         cacheOptions=true
         defaultOptions=true
+        loadOptions=loadCountries
       />
     </div>
   </Dropdown>;

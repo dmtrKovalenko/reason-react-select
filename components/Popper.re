@@ -10,6 +10,7 @@ module Blanket = {
         bottom(`px(0)),
         left(`px(0)),
         right(`px(0)),
+        top(`px(0)),
         position(`fixed),
         zIndex(1),
       ])}
