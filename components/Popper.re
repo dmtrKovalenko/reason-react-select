@@ -1,6 +1,5 @@
 open Emotion;
 
-
 module Blanket = {
   [@react.component]
   let make = (~onClick) => {
@@ -18,14 +17,10 @@ module Blanket = {
   };
 };
 
-module Dropdown = {
-  [@react.component]
-  let make = (~children, ~isOpen, ~target, ~onClose) => {
-    <div className={css([position(`relative)])}>
-      target
-      {isOpen
-         ? <> children <Blanket onClick=onClose /> </>
-         : ReasonReact.null}
-    </div>;
-  };
+[@react.component]
+let make = (~children, ~isOpen, ~target, ~onClose) => {
+  <div className={css([position(`relative)])}>
+    target
+    {isOpen ? <> children <Blanket onClick=onClose /> </> : ReasonReact.null}
+  </div>;
 };

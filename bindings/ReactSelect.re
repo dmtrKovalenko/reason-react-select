@@ -76,6 +76,7 @@ module Async = {
       ~loadOptions: (string, 'a => unit) => unit=?,
       ~matchPos: [@bs.string] [ | `any | `start]=?, /* (any, start) match the start or entire string when filtering */
       ~matchProp: [@bs.string] [ | `any | `label | `value]=?, /* (any, label, value) which option property to filter on */
+      ~menuIsOpen: bool=?,
       ~menuBuffer: int=?, /* buffer of px between the base of the dropdown and the viewport to shift if menu doesnt fit in viewport */
       ~menuContainerStyle: ReactDOMRe.Style.t=?, /* optional style to apply to the menu container */
       ~menuRenderer: menuRendererProps('a) => ReasonReact.reactElement=?, /* Renders a custom menu with options; accepts the following named parameters */
@@ -112,6 +113,12 @@ module Async = {
       ~searchPromptText: StrOrNode.t=?, /* label to prompt for search input */
       ~simpleValue: bool=?, /* pass the value to onChange as a string */
       ~style: ReactDOMRe.Style.t=?, /* optional styles to apply to the control */
+      ~styles: {
+                 .
+                 "menu": ReactDOMRe.Style.t => ReactDOMRe.Style.t,
+                 "control": ReactDOMRe.Style.t => ReactDOMRe.Style.t,
+               }
+                 =?,
       ~tabIndex: StrOrInt.t=?, /* tabIndex of the control */
       ~tabSelectsValue: bool=?, /* whether to select the currently focused value when the [tab] key is pressed */
       ~trimFilter: bool=?, /* whether to trim whitespace from the filter value */
