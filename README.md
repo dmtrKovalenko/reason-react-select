@@ -4,9 +4,13 @@
 
 This example features:
 
-- Have inbound /api/countries route written in Reason
+- Have inbound `/api/countries` route written in Reason
 - Have a select component that queries route and shows the options
 - Have couple of cypress tests confimring this behavior
+
+*Make sure*
+
+Real entry point of application is `components/root.re` because bunch of reason declarations just doesn't support SSR because of missing `cjs` output.
 
 ## Deploy your own
 
