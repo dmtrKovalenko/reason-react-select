@@ -23,7 +23,7 @@ let loadCountries =
 
       Fetch.fetch("/api/countries?q=" ++ inputValue)
       >>- Fetch.Response.json
-      >>= Models.Decode.countries
+      >>= Decoders.countries
       >>= (
         response =>
           response.countries
