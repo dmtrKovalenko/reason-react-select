@@ -91,6 +91,7 @@ let make = (~value, ~onChange, ~className) => {
       <ReactSelect.Async
         value
         className
+        autoFocus=true
         menuIsOpen=true
         onChange={newValue =>
           newValue
@@ -98,14 +99,13 @@ let make = (~value, ~onChange, ~className) => {
           |> onChange
           |> (_ => setIsOpen(_ => false))
         }
-        autoFocus=true
         cacheOptions=true
         defaultOptions=true
         loadOptions={(inputValue, cb) =>
           (inputValue, cb) |> loadCountries |> ignore
         }
-        styles=ReactSelectOverrides.styles
-        components=ReactSelectOverrides.components
+        styles=ReactSelectOverrides.styleOverrides
+        components=ReactSelectOverrides.Components.overrides
       />
     </div>
   </Popper>;
